@@ -18,7 +18,36 @@ Queue::Queue() {
 
 }
 
-Queue::Queue(Queue& copy):head(nullptr),isEmpty(true) {
+Queue::Queue(Queue& copy){
+	Queue q;
+	knot* tmp = copy.head.get();
+	if (tmp==nullptr)
+	{
+		head = nullptr;
+	}
+	else
+	{
+		std::unique_ptr<knot> teil = nullptr;
+		std::unique_ptr<knot>  first_1 = std::make_unique<knot>(tmp->get_key(), tmp->get_key(), teil);
+		knot* teil_real = first_1.get();
+		while (tmp->get_ptr().get() != nullptr)
+		{	
+			std::unique_ptr<knot> first = std::make_unique<knot>(tmp->get_key(), tmp->get_key(), teil);
+			teil_real->get_ptr() = std::move(first);
+			teil_real = teil_real->get_ptr().get();
+			tmp = tmp->get_ptr().get();
+		}
+
+		/*
+		while (tmp != nullptr)
+		{
+			q.push(tmp->get_key());
+			tmp = tmp->get_ptr().get();
+		}
+		head = std::move(q.head);
+		*/
+	}
+
 	head = std::move(copy.head);
 	isEmpty = copy.isEmpty;
 }
